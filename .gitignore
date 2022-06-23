@@ -109,6 +109,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+venvBoxing/
 
 # Spyder project settings
 .spyderproject
@@ -127,3 +128,20 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Other project folders or files
+boxrec/fights/csv/*.csv
+boxrec/fights/snapshots/*.html
+boxrec/fights/fights-config.json
+boxrec/fights/agents/*
+
+boxrec/profiles/csv/*.csv
+boxrec/profiles/snapshot_SAVED/
+boxrec/profiles/snapshots/*.html
+boxrec/profiles/profile-config.json
+boxrec/profiles/agents/*
+
+boxrec/ratings/csv/*.csv
+boxrec/ratings/snapshots/*.html
+boxrec/ratings/config.json
+boxrec/ratings/agents/*
