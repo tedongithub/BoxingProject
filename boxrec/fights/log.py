@@ -14,7 +14,7 @@ logging.basicConfig(
 
 
 def log_msg(msg: str) -> None:
-    """Logs and prints a given message at the info level.""" 
+    """Logs and prints a given message at the info level."""
 
     logging.info(msg)
     print(msg)

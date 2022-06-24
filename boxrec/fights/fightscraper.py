@@ -10,7 +10,6 @@ from fightrequest import create_agents_list, random_header_agent, fetch_with_sem
 
 
 class FightsScraper:
-
     def __init__(self, config: ScrapeConfig) -> None:
         self.config = config
 
@@ -32,21 +31,28 @@ class FightsScraper:
                 event_fight_id = await curr_event_fight_id(url)
 
                 try:
-                    fight = await fetch_with_sem(sem, url, session, headers, event_fight_id)
-                    if fight.get('content_flag') == True:
+                    fight = await fetch_with_sem(
+                        sem, url, session, headers, event_fight_id
+                    )
+                    if fight.get("content_flag") == True:
                         collected_fights.append(fight)
                         log_msg(
-                            f"Successfully scraped event_fight_id#: {event_fight_id}... count: {count+1}/{len(urls)}")
+                            f"Successfully scraped event_fight_id#: {event_fight_id}... count: {count+1}/{len(urls)}"
+                        )
                     else:
                         log_msg(
-                            f"\nFailed to scraped event_fight_id#: {event_fight_id}... count: {count+1}/{len(urls)}")
+                            f"\nFailed to scraped event_fight_id#: {event_fight_id}... count: {count+1}/{len(urls)}"
+                        )
                         break
                 except:
-                    # raise Exception(f"\nfight: {event_fight_id}, {count+1}/{len(urls)} failed to create fight.")
                     log_msg(
-                        f"\nevent_fight_id: {event_fight_id}, {count+1}/{len(urls)} failed to create fight >>> broken in the scrape() except: block.")
+                        f"\nevent_fight_id: {event_fight_id}, {count+1}/{len(urls)} failed to create fight >>> broken in the scrape() except: block."
+                    )
                     break
 
         elapsed = time.perf_counter() - start
-        log_msg(f"\n[FightsScraper]: Finished scraping {len(collected_fights)} fights pages: {elapsed} seconds!\n")
+        log_msg(
+            f"\n[FightsScraper]: Finished scraping {len(collected_fights)} fights pages: {elapsed} seconds!\n"
+        )
+
         await export_scraped_content(collected_fights)

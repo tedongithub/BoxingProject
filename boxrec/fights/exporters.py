@@ -17,22 +17,28 @@ async def export_scraped_content(collected_fights: list[str]) -> None:
 
     start = time.perf_counter()
 
-    scrape_output_dir = pathlib.Path().resolve() / 'snapshots'
+    scrape_output_dir = pathlib.Path().resolve() / "snapshots"
     scrape_output_dir.mkdir(parents=True, exist_ok=True)
 
     for count, fight in enumerate(collected_fights):
         event_fight_id = fight.get("event_fight_id")
-        response_text = fight.get('response_text')
+        response_text = fight.get("response_text")
         output_file = scrape_output_dir / f"id-{event_fight_id.replace('/','-')}.html"
         try:
             output_file.write_text(response_text)
-            log_msg(f"Saved {count+1}/{len(collected_fights)} html files... event_fight_id#: {event_fight_id}")
+            log_msg(
+                f"Saved {count+1}/{len(collected_fights)} html files... event_fight_id#: {event_fight_id}"
+            )
         except:
-            log_msg(f"event_fight_id: {event_fight_id}, did not have the proper encoding and was skipped!")
+            log_msg(
+                f"event_fight_id: {event_fight_id}, did not have the proper encoding and was skipped!"
+            )
             continue
 
     elapsed = time.perf_counter() - start
-    log_msg(f"\n[FightsExport]: Fights Scraper has saved the available fights page html bodies: {elapsed} seconds!\n")
+    log_msg(
+        f"\n[FightsExport]: Fights Scraper has saved the available fights page html bodies: {elapsed} seconds!\n"
+    )
 
 
 async def save_df_to_csv(config: ScrapeConfig, df: pd.DataFrame) -> None:
@@ -41,10 +47,12 @@ async def save_df_to_csv(config: ScrapeConfig, df: pd.DataFrame) -> None:
     start = time.perf_counter()
 
     filename = f"{config.csv_folder}{config.fights_csv_prefix}-{datetime.now().strftime('%Y_%m_%d-%I_%M_%S_%p')}.csv"
-    df.to_csv(filename, encoding='utf-8', index=False)
+    df.to_csv(filename, encoding="utf-8", index=False)
 
     elapsed = time.perf_counter() - start
-    log_msg(f"\n[DataStorage]: The fights dataframe was exported to a .csv file: {elapsed} seconds!\n")
+    log_msg(
+        f"\n[DataStorage]: The fights dataframe was exported to a .csv file: {elapsed} seconds!\n"
+    )
 
 
 async def save_all_fights_to_csv(config: ScrapeConfig, all_fights: list[Fight]) -> None:
@@ -53,14 +61,12 @@ async def save_all_fights_to_csv(config: ScrapeConfig, all_fights: list[Fight]) 
     start = time.perf_counter()
 
     filename = f"{config.csv_folder}{config.fights_csv_prefix}-{datetime.now().strftime('%Y_%m_%d-%I_%M_%S_%p')}.csv"
-
     try:
-        with open(filename, 'w', newline='', encoding='utf-8') as f:
+        with open(filename, "w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f)
             for fight in all_fights:
                 writer.writerow(
                     [
-
                         fight.event_fight_id,
                         fight.event_id,
                         fight.fight_id,
@@ -114,24 +120,27 @@ async def save_all_fights_to_csv(config: ScrapeConfig, all_fights: list[Fight]) 
                         fight.fight_judge3_name,
                         fight.fight_judge3_score_l,
                         fight.fight_judge3_score_r,
-
-                        fight.fight_titles_avail
+                        fight.fight_titles_avail,
                     ]
                 )
     except BaseException as e:
-        print('BaseException:', filename)
+        print("BaseException:", filename)
     else:
         elapsed = time.perf_counter() - start
-        log_msg(f"\n[DataStorage]: List of Fight(s) was exported to a .csv file: {elapsed} seconds!\n")
+        log_msg(
+            f"\n[DataStorage]: List of Fight(s) was exported to a .csv file: {elapsed} seconds!\n"
+        )
 
 
-def get_fight_urls_not_in_archive(config: ScrapeConfig): 
+def get_fight_urls_not_in_archive(config: ScrapeConfig):
     """Compares careers(fightsnip) table from database to saved files and returns a list of URLs not yet saved."""
 
     curr_fsnips_fight_ids = get_fight_ids_in_fightsnips_table()
 
     directory = config.fights_store
-    files = [str(file).split('id-')[1].split('.html')[0].replace('-', '/')
-             for file in list(pathlib.Path(directory).glob('*'))]
+    files = [
+        str(file).split("id-")[1].split(".html")[0].replace("-", "/")
+        for file in list(pathlib.Path(directory).glob("*"))
+    ]
+
     return [build_next_url(config, x) for x in curr_fsnips_fight_ids if x not in files]
- 

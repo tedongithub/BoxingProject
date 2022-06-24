@@ -10,8 +10,8 @@ class ScrapeConfig:
     database: str
     fights_store: str
     html_folder: str
-    csv_folder: str 
-    fights_csv_prefix: str 
+    csv_folder: str
+    fights_csv_prefix: str
     user_agent_list: str
     scrape_output_folder: str
     root_url: str
@@ -23,11 +23,8 @@ class ScrapeConfig:
 
 def read_config(config_file: str) -> ScrapeConfig:
     """Reads a json config file and unpacks to create an instance of ScrapeConfig."""
-    
+
     with open(config_file) as file:
         data = json.load(file)
-        return ScrapeConfig(**data['config'])
 
-
-
-
+        return ScrapeConfig(**data["config"])

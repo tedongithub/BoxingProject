@@ -26,5 +26,5 @@ def read_config(config_file: str) -> ScrapeConfig:
 
     with open(config_file) as file:
         data = json.load(file)
-        return ScrapeConfig(**data['config'])
 
+        return ScrapeConfig(**data["config"])
